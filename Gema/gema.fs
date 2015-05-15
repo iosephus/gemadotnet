@@ -9,15 +9,15 @@ type Point = { Step: int; State: int; Position: float array; }
 
 let WalkOneParticle (options:Config) (randomGenerator:MersenneTwister) =
     let rec _walkOneParticle (acc:List<Point>) (prevPoint:Point) (stepsToDo:int) (randomGenerator:MersenneTwister) =
-        if stepsToDo = 0 then
-            acc
-        else
+        match stepsToDo with
+        | 0 -> acc
+        | todo ->
             let newX = prevPoint.Position.[0] + randomGenerator.NextDouble()
             let newY = prevPoint.Position.[1] + randomGenerator.NextDouble()
             let newZ = prevPoint.Position.[2] + randomGenerator.NextDouble()
             let newPoint = { Step = prevPoint.Step + 1;  State = 0; Position = [|newX; newY; newZ|]; }
             let newAcc = match newPoint.Step % options.StorageInterval with | 0 -> (List.append acc [newPoint]) | _ -> acc
-            _walkOneParticle newAcc newPoint (stepsToDo - 1) randomGenerator
+            _walkOneParticle newAcc newPoint (todo - 1) randomGenerator
     let initPoint = { Step = 0;  State = 0; Position = [|0.0; 0.0; 0.0|]; }
     _walkOneParticle [initPoint] initPoint options.NumberOfSteps randomGenerator
 
