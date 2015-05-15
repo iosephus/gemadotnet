@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.net
-// See the 'F# Tutorial' project for more help.
-
+﻿
 type Config = { NumberOfParticles: int; NumberOfSteps: int; }
 type Point = { Step: int; State: int; Position: float array; }
 
