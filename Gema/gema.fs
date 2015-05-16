@@ -1,52 +1,64 @@
 ﻿
-module Main
+namespace Gema
+
+module Main =
 
     open System
     open System.Diagnostics
     open MathNet.Numerics.Random
 
-    open Sphere
+    open Gema.Models
 
-    type Config = { NumberOfParticles: int; NumberOfSteps: int; StorageInterval: int; }
-    type Point = { Step: int; State: int; Position: float array; }
-
-    let GetStartPpoint (options:Config) (randomGenerator:MersenneTwister) =
-        let startX = randomGenerator.NextDouble()
-        let startY = randomGenerator.NextDouble()
-        let startZ = randomGenerator.NextDouble()
+    let GetStartPpoint (options:SimulationInfo) (modelPDFs:Sphere.ModelPDFs) =
+        let startX = modelPDFs.startPDF.Sample()
+        let startY = modelPDFs.startPDF.Sample()
+        let startZ = modelPDFs.startPDF.Sample()
         { Step = 0;  State = 0; Position = [|startX; startY; startZ|]; }
 
-    let GetNextPoint (options:Config) (prevPoint:Point) (randomGenerator:MersenneTwister) =
-        let newX = prevPoint.Position.[0] + randomGenerator.NextDouble()
-        let newY = prevPoint.Position.[1] + randomGenerator.NextDouble()
-        let newZ = prevPoint.Position.[2] + randomGenerator.NextDouble()
+    let GetNextPoint (options:SimulationInfo) (prevPoint:Point) (modelPDFs:Sphere.ModelPDFs) =
+        let newX = prevPoint.Position.[0] + modelPDFs.stepPDF.Sample()
+        let newY = prevPoint.Position.[1] + modelPDFs.stepPDF.Sample()
+        let newZ = prevPoint.Position.[2] + modelPDFs.stepPDF.Sample()
         { Step = prevPoint.Step + 1;  State = 0; Position = [|newX; newY; newZ|]; }
 
-    let WalkOneParticle (options:Config) (randomGenerator:MersenneTwister) =
-        let rec _walkOneParticle (acc:List<Point>) (prevPoint:Point) (stepsToDo:int) (randomGenerator:MersenneTwister) =
+    let WalkOneParticle (simulationInfo:SimulationInfo) modelPDFs =
+        let rec _walkOneParticle (acc:List<Point>) (prevPoint:Point) (stepsToDo:int) modelPDFs =
             match stepsToDo with
             | 0 -> acc
             | todo ->
-                let newPoint = GetNextPoint options prevPoint randomGenerator
-                let newAcc = match newPoint.Step % options.StorageInterval with | 0 -> (List.append acc [newPoint]) | _ -> acc
-                _walkOneParticle newAcc newPoint (todo - 1) randomGenerator
-        let startPoint = GetStartPpoint options randomGenerator
-        _walkOneParticle [startPoint] startPoint options.NumberOfSteps randomGenerator
+                let newPoint = GetNextPoint simulationInfo prevPoint modelPDFs
+                let newAcc = match newPoint.Step % simulationInfo.StorageInterval with | 0 -> (List.append acc [newPoint]) | _ -> acc
+                _walkOneParticle newAcc newPoint (todo - 1) modelPDFs
+        let startPoint = GetStartPpoint simulationInfo modelPDFs
+        _walkOneParticle [startPoint] startPoint simulationInfo.NumberOfSteps modelPDFs
 
-    let run config =
-        let randomGenerator = new MersenneTwister(93849329)
+    let run simulationInfo =
+        let modelPars = { r = 1.0; }
+        let modelInfo = Sphere.CreateModelInfo modelPars
+        let modelPDFs = Sphere.createPDFs simulationInfo modelInfo 93849329
         let sw = new Stopwatch()
         sw.Start()
-        let results = WalkOneParticle config randomGenerator
+        let results = WalkOneParticle simulationInfo modelPDFs
         sw.Stop()
         printfn "Execution time: %d ms" sw.ElapsedMilliseconds
         results
 
+    let processCLIOptions argv =
+        let numberOfParticles = 100000
+        let numberOfSteps = 100000
+        let storageInterval = 1000
+        let stepSize = 1.0 / float numberOfSteps
+        { NumberOfParticles = numberOfParticles;
+          NumberOfSteps = numberOfSteps;
+          StorageInterval = storageInterval;
+          StepSize = stepSize}
+
+
     [<EntryPoint>]
     let main argv = 
-        let Options = { NumberOfParticles = 100000; NumberOfSteps = 100000; StorageInterval = 1000; }
-        let results = run Options
+        let SimulInfo = processCLIOptions argv
+        let results = run SimulInfo
         printfn "This is the .NET implementation of Gema version 0.1"
-        printfn "Running with NumberOfParticles = %d, NumberOfSteps = %d; StorageInterval = %d" Options.NumberOfParticles Options.NumberOfSteps Options.StorageInterval
+        printfn "Running with NumberOfParticles = %d, NumberOfSteps = %d; StorageInterval = %d" SimulInfo.NumberOfParticles SimulInfo.NumberOfSteps SimulInfo.StorageInterval
         printfn "Results = %s" (results.ToString())
         0 // return an integer exit code

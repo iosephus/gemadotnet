@@ -1,19 +1,21 @@
 ﻿
-module Sphere
+namespace Gema.Models
+
+module Sphere =
 
     open System
     open MathNet.Numerics.Random
     open MathNet.Numerics.Distributions
+    open Gema
 
-    type SphereInfo = { radius: float; radiusSquared: float; }
-    type modelPDFs = { initPDF: IContinuousDistribution; stepPDF: IContinuousDistribution; randomGenerator: Random; }
-    type SimulationInfo = { stepSize: float; }
+    type SphereInfo = { radius: float; radiusSquared: float }
+    type ModelPDFs = { startPDF: IContinuousDistribution; stepPDF: IContinuousDistribution; randomGenerator: Random; }
 
-    let CreateModelInfo modelPars =
-        { radius = modelPars.radius; radiusSquared = modelPars.radius * modelPars.radius; }
+    let CreateModelInfo (modelPars:ModelPars) =
+        { radius = modelPars.r; radiusSquared = modelPars.r* modelPars.r; }
 
-    let createPDF simulationInfo modelInfo randomSeed =
+    let createPDFs (simulationInfo:SimulationInfo) modelInfo randomSeed =
         let randomGenerator = new MersenneTwister(randomSeed, false)
         let startPDF = new ContinuousUniform(-modelInfo.radius, modelInfo.radius, randomGenerator)
-        let stepPDF = new Normal(0.0, simulationInfo.stepSize, randomGenerator)
-        { initPDF = startPDF; stepPDF = stepPDF; randomGenerator = randomGenerator; }
+        let stepPDF = new Normal(0.0, simulationInfo.StepSize, randomGenerator)
+        { startPDF = startPDF; stepPDF = stepPDF; randomGenerator = randomGenerator; }

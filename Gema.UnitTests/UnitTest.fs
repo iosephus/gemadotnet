@@ -1,11 +1,12 @@
-﻿namespace UnitTestProject1
+﻿namespace Gema.UnitTests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
+open Gema
 
 [<TestClass>]
 type UnitTest() = 
     [<TestMethod>]
-    member x.TestMethod1 () = 
-        let testVal = 1
-        Assert.AreEqual(1, testVal)
+    member x.RunGema () = 
+        let returnValue = Main.main [||]
+        Assert.AreEqual(0, returnValue)
