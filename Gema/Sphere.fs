@@ -9,7 +9,6 @@ module Sphere =
     open Gema
 
     type SphereInfo = { radius: float; radiusSquared: float }
-    type ModelPDFs = { startPDF: IContinuousDistribution; stepPDF: IContinuousDistribution; randomGenerator: Random; }
 
     let CreateModelInfo (modelPars:ModelPars) =
         { radius = modelPars.r; radiusSquared = modelPars.r* modelPars.r; }

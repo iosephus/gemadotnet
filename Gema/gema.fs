@@ -9,13 +9,13 @@ module Main =
 
     open Gema.Models
 
-    let GetStartPpoint (options:SimulationInfo) (modelPDFs:Sphere.ModelPDFs) =
+    let GetStartPpoint (options:SimulationInfo) (modelPDFs:ModelPDFs) =
         let startX = modelPDFs.startPDF.Sample()
         let startY = modelPDFs.startPDF.Sample()
         let startZ = modelPDFs.startPDF.Sample()
         { Step = 0;  State = 0; Position = [|startX; startY; startZ|]; }
 
-    let GetNextPoint (options:SimulationInfo) (prevPoint:Point) (modelPDFs:Sphere.ModelPDFs) =
+    let GetNextPoint (options:SimulationInfo) (prevPoint:Point) (modelPDFs:ModelPDFs) =
         let newX = prevPoint.Position.[0] + modelPDFs.stepPDF.Sample()
         let newY = prevPoint.Position.[1] + modelPDFs.stepPDF.Sample()
         let newZ = prevPoint.Position.[2] + modelPDFs.stepPDF.Sample()
