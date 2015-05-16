@@ -5,6 +5,13 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Gema", "Gema\Gema.fsproj", "{2C94C38F-5152-4207-AEA0-BFB0C4E55597}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B6AF903-715A-4267-85A5-9652CDE088E8}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Gema.UnitTests", "Gema.UnitTests\Gema.UnitTests.fsproj", "{26C6FFAA-FE88-47CB-881B-74E5C7486377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{2C94C38F-5152-4207-AEA0-BFB0C4E55597}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C94C38F-5152-4207-AEA0-BFB0C4E55597}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C94C38F-5152-4207-AEA0-BFB0C4E55597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C6FFAA-FE88-47CB-881B-74E5C7486377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C6FFAA-FE88-47CB-881B-74E5C7486377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C6FFAA-FE88-47CB-881B-74E5C7486377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C6FFAA-FE88-47CB-881B-74E5C7486377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
