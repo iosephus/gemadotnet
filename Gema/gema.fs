@@ -6,36 +6,36 @@ module Main =
     open System
     open System.Diagnostics
     open MathNet.Numerics.Random
-
     open Gema.Models
 
-    let GetStartPpoint (options:SimulationInfo) (modelPDFs:ModelPDFs) =
-        let startX = modelPDFs.startPDF.Sample()
-        let startY = modelPDFs.startPDF.Sample()
-        let startZ = modelPDFs.startPDF.Sample()
-        { Step = 0;  State = 0; Position = [|startX; startY; startZ|]; }
+    let rec GetStartPoint modelFunctions =
+        let newPosition = modelFunctions.GetStartPosition
+        match modelFunctions.CheckStartPosition newPosition with
+        | Some(state) -> { Step = 0;  State = state; Position = newPosition; }
+        | None -> GetStartPoint modelFunctions
 
-    let GetNextPoint (options:SimulationInfo) (prevPoint:Point) (modelPDFs:ModelPDFs) =
-        let newX = prevPoint.Position.[0] + modelPDFs.stepPDF.Sample()
-        let newY = prevPoint.Position.[1] + modelPDFs.stepPDF.Sample()
-        let newZ = prevPoint.Position.[2] + modelPDFs.stepPDF.Sample()
-        { Step = prevPoint.Step + 1;  State = 0; Position = [|newX; newY; newZ|]; }
+    let rec GetNextPoint modelFunctions previousPoint =
+        let displacement = modelFunctions.GetDisplacement previousPoint
+        let newPosition = Array.map2 (fun x y -> x + y) previousPoint.Position displacement
+        match modelFunctions.CheckDisplacement previousPoint displacement with
+        | Some(state) -> { Step = previousPoint.Step + 1;  State = state; Position = newPosition; }
+        | None -> GetNextPoint modelFunctions previousPoint
+        
 
-    let WalkOneParticle (simulationInfo:SimulationInfo) modelPDFs =
-        let rec _walkOneParticle (acc:List<Point>) (prevPoint:Point) (stepsToDo:int) modelPDFs =
+    let WalkOneParticle simulationInfo modelFunctions =
+        let rec _walkOneParticle (acc:List<Point>) (prevPoint:Point) (stepsToDo:int) modelFunctions =
             match stepsToDo with
             | 0 -> acc
             | todo ->
-                let newPoint = GetNextPoint simulationInfo prevPoint modelPDFs
+                let newPoint = GetNextPoint modelFunctions
                 let newAcc = match newPoint.Step % simulationInfo.StorageInterval with | 0 -> (List.append acc [newPoint]) | _ -> acc
                 _walkOneParticle newAcc newPoint (todo - 1) modelPDFs
-        let startPoint = GetStartPpoint simulationInfo modelPDFs
-        _walkOneParticle [startPoint] startPoint simulationInfo.NumberOfSteps modelPDFs
+        let startPoint = GetStartPoint modelFunctions
+        _walkOneParticle [startPoint] startPoint simulationInfo.NumberOfSteps modelFunctions
 
     let run simulationInfo =
-        let modelPars = { r = 1.0; }
-        let modelInfo = Sphere.CreateModelInfo modelPars
-        let modelPDFs = Sphere.createPDFs simulationInfo modelInfo 93849329
+        let modelParameters = SphereModel.CreateModelInfo(Map.ofList [("Radius", "1.0")])
+        let modelPDFs = SphereModel.CreatePDFs simulationInfo modelParameters 93849329
         let sw = new Stopwatch()
         sw.Start()
         let results = WalkOneParticle simulationInfo modelPDFs

@@ -58,6 +58,7 @@
     <Content Include="packages.config" />
     <Compile Include="Types.fs" />
     <Compile Include="Sphere.fs" />
+    <Compile Include="Sphere2.fs" />
     <Compile Include="Gema.fs" />
   </ItemGroup>
   <ItemGroup>
