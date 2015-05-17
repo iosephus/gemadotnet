@@ -64,6 +64,11 @@
     <None Include="MSTest.runsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gema.CSharpModules\Gema.CSharpModules.csproj">
+      <Name>Gema.CSharpModules</Name>
+      <Project>{c01adbe5-a434-4a5d-b941-0e2b5b030d3f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Gema\Gema.fsproj">
       <Name>Gema</Name>
       <Project>{2c94c38f-5152-4207-aea0-bfb0c4e55597}</Project>
