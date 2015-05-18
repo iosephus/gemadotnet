@@ -26,9 +26,7 @@ type SphereModel2(modelInputPars: Map<string, string>, simulationInfo: Simulatio
 
             member this.CheckStartPosition position =
                 let distance = position |> Array.map (fun x -> x * x) |> Array.sum
-                match distance < this.RadiusSquared with
-                | true -> Some(0)
-                | false -> None
+                if distance < this.RadiusSquared then Some 0 else None
 
             member this.GetDisplacement fromPoint =
                 let dispX = this.StepPDF.Sample()
@@ -39,7 +37,5 @@ type SphereModel2(modelInputPars: Map<string, string>, simulationInfo: Simulatio
             member this.CheckDisplacement fromPoint displacement =
                 let newPosition = Array.map2 (fun x y -> x + y) fromPoint.Position displacement
                 let newDistance = newPosition |> Array.map (fun x -> x * x) |> Array.sum
-                match newDistance < this.RadiusSquared with
-                | true -> Some(fromPoint.State)
-                | false -> None
+                if newDistance < this.RadiusSquared then Some 0 else None
             

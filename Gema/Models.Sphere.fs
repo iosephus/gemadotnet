@@ -28,9 +28,7 @@ module SphereModel =
 
     let CheckStartPosition simulationParameters modelParameters (position:float array) : int option =
         let distance = position |> Array.map (fun x -> x * x) |> Array.sum
-        match distance < modelParameters.RadiusSquared with
-        | true -> Some(0)
-        | false -> None
+        if distance < modelParameters.RadiusSquared then Some 0 else None
 
     let GetDisplacement simulationParameters modelParameters modelPDFs fromPoint =
         let dispX = modelPDFs.StepPDF.Sample()
@@ -41,7 +39,5 @@ module SphereModel =
     let CheckDisplacement simulationParameters modelParameters fromPoint displacement =
         let newPosition = Array.map2 (fun x y -> x + y) fromPoint.Position displacement
         let newDistance = newPosition |> Array.map (fun x -> x * x) |> Array.sum
-        match newDistance < modelParameters.RadiusSquared with
-        | true -> Some(0)
-        | false -> None
+        if newDistance < modelParameters.RadiusSquared then Some 0 else None
     
