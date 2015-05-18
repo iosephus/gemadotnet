@@ -1,5 +1,5 @@
 ﻿
-namespace Gema
+namespace Gema.Common
 
 open System
 open MathNet.Numerics.Distributions

@@ -4,7 +4,7 @@ namespace Gema.Models
 //open System
 open MathNet.Numerics.Random
 open MathNet.Numerics.Distributions
-open Gema
+open Gema.Common
 
 type SphereModel2(modelInputPars: Map<string, string>, simulationInfo: SimulationParameters, randomSeed: int) =
         let radius = float modelInputPars.["Radius"]

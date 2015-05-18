@@ -4,7 +4,7 @@ namespace Gema.Models
 open System
 open MathNet.Numerics.Random
 open MathNet.Numerics.Distributions
-open Gema
+open Gema.Common
 
 module SphereModel =
 

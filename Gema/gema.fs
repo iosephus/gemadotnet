@@ -6,6 +6,7 @@ module Main =
     open System
     open System.Diagnostics
     open MathNet.Numerics.Random
+    open Gema.Common
     open Gema.Models
 
     let rec GetStartPoint startPosFunction checkStartPosFunction =
@@ -35,7 +36,7 @@ module Main =
 
     let run simulationInfo =
         let modelInputParameters = Map.ofList [("Radius", "1.0")]
-        let model = new SphereModel2(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
+        let model = new SphereModelCS(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
         let modelFunctions = { GetStartPosition = model.GetStartPosition;
                                CheckStartPosition = model.CheckStartPosition;
                                GetDisplacement = model.GetDisplacement;

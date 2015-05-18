@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using MathNet.Numerics.Random;
 using MathNet.Numerics.Distributions;
 using Microsoft.FSharp.Core;
-using Gema;
+using Microsoft.FSharp.Collections;
+using Gema.Common;
 
-namespace Gema.CSharpModules
+namespace Gema.Models
 {
-    public class SphereCS: IGemaModel
+    public class SphereModelCS: IGemaModel
     {
         readonly double Radius;
         readonly double RadiusSquared;
@@ -19,7 +20,7 @@ namespace Gema.CSharpModules
         readonly IContinuousDistribution StartPDF;
         readonly IContinuousDistribution StepPDF;
 
-        public SphereCS (Dictionary<String, String> inputPars, SimulationParameters simulationInfo, int randomSeed)
+        public SphereModelCS (FSharpMap<String, String> inputPars, SimulationParameters simulationInfo, int randomSeed)
         {
             double radius = Convert.ToDouble(inputPars["Radius"]);
             Random randomGenerator = new MersenneTwister(randomSeed);

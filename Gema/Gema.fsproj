@@ -56,8 +56,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <Compile Include="Sphere.fs" />
-    <Compile Include="Sphere2.fs" />
+    <Compile Include="Models.Sphere.fs" />
+    <Compile Include="Models.Sphere2.fs" />
     <Compile Include="Gema.fs" />
   </ItemGroup>
   <ItemGroup>
