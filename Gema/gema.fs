@@ -9,7 +9,7 @@ module Main =
     open Gema.Models
 
     let rec GetStartPoint startPosFunction checkStartPosFunction =
-        let newPosition = startPosFunction()
+        let newPosition = startPosFunction ()
         match checkStartPosFunction newPosition with
         | Some(state) -> { Step = 0;  State = state; Position = newPosition; }
         | None -> GetStartPoint startPosFunction checkStartPosFunction 
@@ -35,7 +35,7 @@ module Main =
 
     let run simulationInfo =
         let modelInputParameters = Map.ofList [("Radius", "1.0")]
-        let model = new SphereModel2(modelInputParameters, simulationInfo, 93849329)
+        let model = new SphereModel2(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
         let modelFunctions = { GetStartPosition = model.GetStartPosition;
                                CheckStartPosition = model.CheckStartPosition;
                                GetDisplacement = model.GetDisplacement;
@@ -55,7 +55,7 @@ module Main =
         { NumberOfParticles = numberOfParticles;
           NumberOfSteps = numberOfSteps;
           StorageInterval = storageInterval;
-          StepSize = stepSize}
+          StepSize = stepSize; }
 
 
     [<EntryPoint>]

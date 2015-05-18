@@ -1,27 +1,30 @@
 ﻿
 namespace Gema.Models
 
-open System
+//open System
 open MathNet.Numerics.Random
 open MathNet.Numerics.Distributions
 open Gema
 
 type SphereModel2(modelInputPars: Map<string, string>, simulationInfo: SimulationParameters, randomSeed: int) =
-        member this.Radius = float modelInputPars.["Radius"]
-        member this.RadiusSquared = this.Radius * this.Radius
+        let radius = float modelInputPars.["Radius"]
+        let randomGenerator = MersenneTwister(randomSeed)
         member this.RandomSeed = randomSeed
-        member this.RandomGenerator = new MersenneTwister(this.RandomSeed, false)
-        member this.StartPDF = new ContinuousUniform(-this.Radius, this.Radius, this.RandomGenerator)
-        member this.StepPDF = new Normal(0.0, simulationInfo.StepSize, this.RandomGenerator)
+        member this.RandomGenerator = randomGenerator
+        member this.Radius = radius
+        member this.RadiusSquared = radius * radius
+        member this.StartPDF = ContinuousUniform(-radius, radius, randomGenerator)
+        member this.StepPDF = Normal(0.0, simulationInfo.StepSize, randomGenerator)
 
         interface IGemaModel with
-            member this.GetStartPosition (fromPoint : float array =
+
+            member this.GetStartPosition () =
                 let x = this.StartPDF.Sample()
                 let y = this.StartPDF.Sample()
                 let z = this.StartPDF.Sample()
-                [|x ; y; z|]
+                [| x; y; z |]
 
-            member this.CheckStartPosition (position:float array) =
+            member this.CheckStartPosition position =
                 let distance = position |> Array.map (fun x -> x * x) |> Array.sum
                 match distance < this.RadiusSquared with
                 | true -> Some(0)
