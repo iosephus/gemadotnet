@@ -34,7 +34,7 @@ module Main =
         let startPoint = GetStartPoint modelFunctions.GetStartPosition modelFunctions.CheckStartPosition
         _walkOneParticle [startPoint] startPoint numberOfSteps modelFunctions
 
-    let run simulationInfo =
+    let run (simulationInfo: SimulationParameters) =
         let modelInputParameters = Map.ofList [("Radius", "1.0")]
         let model = new SphereModelCS(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
         let modelFunctions = { GetStartPosition = model.GetStartPosition;
@@ -43,13 +43,14 @@ module Main =
                                CheckDisplacement = model.CheckDisplacement; }
         let sw = new Stopwatch()
         sw.Start()
-        let results = WalkOneParticle simulationInfo.NumberOfSteps simulationInfo.StorageInterval modelFunctions
+        //let results = WalkOneParticle simulationInfo.NumberOfSteps simulationInfo.StorageInterval modelFunctions
+        let results = Async.Parallel [for i in [0..simulationInfo.NumberOfParticles - 1] -> async { return WalkOneParticle simulationInfo.NumberOfSteps simulationInfo.StorageInterval modelFunctions }] |> Async.RunSynchronously
         sw.Stop()
         printfn "Execution time: %d ms" sw.ElapsedMilliseconds
         results
 
     let processCLIOptions argv =
-        let numberOfParticles = 100000
+        let numberOfParticles = 1000
         let numberOfSteps = 100000
         let storageInterval = 1000
         let stepSize = 1.0 / float numberOfSteps
