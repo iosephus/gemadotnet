@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcinusModelCS.cs" />
     <Compile Include="Models.SphereCS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
