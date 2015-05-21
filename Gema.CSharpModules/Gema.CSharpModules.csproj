@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcinusModelCS.cs" />
+    <Compile Include="CircleModelCS.cs" />
+    <Compile Include="CylinderModelCS.cs" />
     <Compile Include="Models.SphereCS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
