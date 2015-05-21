@@ -9,7 +9,7 @@ using Microsoft.FSharp.Core;
 using Microsoft.FSharp.Collections;
 using Gema.Common;
 
-namespace Gema.CSharpModules
+namespace Gema.Models
 {
     public class AcinusModelCS : IGemaModel
     {

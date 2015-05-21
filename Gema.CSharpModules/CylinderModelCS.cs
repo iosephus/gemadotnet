@@ -9,9 +9,9 @@ using Microsoft.FSharp.Core;
 using Microsoft.FSharp.Collections;
 using Gema.Common;
 
-namespace Gema.CSharpModules
+namespace Gema.Models
 {
-    class CylinderModelCS : IGemaModel
+    public class CylinderModelCS : IGemaModel
     {
         readonly double Radius;
         readonly double RadiusSquared;

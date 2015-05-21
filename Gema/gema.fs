@@ -36,7 +36,7 @@ module Main =
 
     let run (simulationInfo: SimulationParameters) =
         let modelInputParameters = Map.ofList [("Radius", "1.0")]
-        let model = new SphereModelCS(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
+        let model = new CircleModelCS(modelInputParameters, simulationInfo, 93849329) :> IGemaModel
         let modelFunctions = { GetStartPosition = model.GetStartPosition;
                                CheckStartPosition = model.CheckStartPosition;
                                GetDisplacement = model.GetDisplacement;
@@ -50,9 +50,9 @@ module Main =
         results
 
     let processCLIOptions argv =
-        let numberOfParticles = 1000
-        let numberOfSteps = 100000
-        let storageInterval = 1000
+        let numberOfParticles = 10000
+        let numberOfSteps = 10000
+        let storageInterval = 10000
         let stepSize = 1.0 / float numberOfSteps
         { NumberOfParticles = numberOfParticles;
           NumberOfSteps = numberOfSteps;
@@ -63,8 +63,8 @@ module Main =
     [<EntryPoint>]
     let main argv = 
         let SimulInfo = processCLIOptions argv
-        let results = run SimulInfo
         printfn "This is the .NET implementation of Gema version 0.1"
         printfn "Running with NumberOfParticles = %d, NumberOfSteps = %d; StorageInterval = %d" SimulInfo.NumberOfParticles SimulInfo.NumberOfSteps SimulInfo.StorageInterval
+        let results = run SimulInfo
         printfn "Results = %s" (results.ToString())
         0 // return an integer exit code

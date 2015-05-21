@@ -8,9 +8,9 @@ using Microsoft.FSharp.Core;
 using Microsoft.FSharp.Collections;
 using Gema.Common;
 
-namespace Gema.CSharpModules
+namespace Gema.Models
 {
-    class CircleModelCS : IGemaModel
+    public class CircleModelCS : IGemaModel
     {
         readonly double Radius;
         readonly double RadiusSquared;
