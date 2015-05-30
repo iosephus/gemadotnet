@@ -50,8 +50,8 @@ module Main =
         results
 
     let processCLIOptions argv =
-        let numberOfParticles = 1000
-        let numberOfSteps = 100000
+        let numberOfParticles = 10000
+        let numberOfSteps = 10000
         let storageInterval = 1000
         let stepSize = 1.0 / float numberOfSteps
         { NumberOfParticles = numberOfParticles;

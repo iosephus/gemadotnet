@@ -7,6 +7,7 @@ open Gema
 [<TestClass>]
 type UnitTest() = 
     [<TestMethod>]
-    member x.RunGema () = 
+    [<TestCategory("Execution")>]
+    member x.``Run Gema`` () = 
         let returnValue = Main.main [||]
         Assert.AreEqual(0, returnValue)
